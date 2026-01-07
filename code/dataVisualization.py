@@ -100,7 +100,30 @@ def visualize_data_1(csv_file_path):
     plt.ylabel('Average Number of Tokens')
     plt.savefig('../plots/avg_num_tokens_per_emotion.png')
     plt.show()
+
+
+def is_data_valid(csv_file_path):
+
+    csv_file = pd.read_csv(csv_file_path)
     
+    emotions = csv_file['Emotion']
+    texts = csv_file['Text']
+
+    for text in texts:
+        if len(text.strip()) == 0:
+            print('Invalid Data: Text of Length 0 Found')
+            return False
+        
+    for emotion in emotions:
+        if emotion not in ['neutral', 'joy', 'sadness', 'fear', 'surprise', 'anger', 'shame', 'disgust']:
+            print(f'Invalid Data: Unknown Emotion {emotion} Found')
+            return False
+        
+    print('Data is Valid')
+    return True
+
+
+
 
 
     
