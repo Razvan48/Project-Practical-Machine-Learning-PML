@@ -3,9 +3,9 @@ import datasetCreation
 import trainings
 
 
+# dataVisualization.is_data_valid('../data/emotion_dataset_raw.csv')
 # dataVisualization.visualize_data_0('../data/emotion_dataset_raw.csv')
 # dataVisualization.visualize_data_1('../data/emotion_dataset_raw.csv')
-# dataVisualization.is_data_valid('../data/emotion_dataset_raw.csv')
 
 # datasetCreation.create_tf_idf_dataset_0('../data/emotion_dataset_raw.csv')
 
