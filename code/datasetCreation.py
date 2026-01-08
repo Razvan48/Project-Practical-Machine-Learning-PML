@@ -28,7 +28,7 @@ def create_tf_idf_dataset_0(csv_file_path):
 
     TRAIN_PERCENTAGE = 0.7
 
-    X_train, X_test, Y_train, Y_test = train_test_split(final_texts, emotions,
+    X_train, X_validation, Y_train, Y_validation = train_test_split(final_texts, emotions,
                                                         train_size=TRAIN_PERCENTAGE,
                                                         random_state=23, shuffle=True,
                                                         stratify=emotions)
@@ -36,25 +36,25 @@ def create_tf_idf_dataset_0(csv_file_path):
     tf_idf_vectorizer = TfidfVectorizer(max_features=128)
     tf_idf_vectorizer.fit(X_train)
     X_train_tf_idf = tf_idf_vectorizer.transform(X_train)
-    X_test_tf_idf = tf_idf_vectorizer.transform(X_test)
+    X_validation_tf_idf = tf_idf_vectorizer.transform(X_validation)
 
     label_encoder = LabelEncoder()
     label_encoder.fit(Y_train)
     Y_train_encoded = label_encoder.transform(Y_train)
-    Y_test_encoded = label_encoder.transform(Y_test)
+    Y_validation_encoded = label_encoder.transform(Y_validation)
 
     X_train_tf_idf = X_train_tf_idf.toarray()
-    X_test_tf_idf = X_test_tf_idf.toarray()
+    X_validation_tf_idf = X_validation_tf_idf.toarray()
 
     print(f'X_train_tf_idf Shape: {X_train_tf_idf.shape}')
     print(f'Y_train_encoded Shape: {Y_train_encoded.shape}')
-    print(f'X_test_tf_idf Shape: {X_test_tf_idf.shape}')
-    print(f'Y_test_encoded Shape: {Y_test_encoded.shape}')
+    print(f'X_validation_tf_idf Shape: {X_validation_tf_idf.shape}')
+    print(f'Y_validation_encoded Shape: {Y_validation_encoded.shape}')
 
     np.save('../data/X_train_tf_idf.npy', X_train_tf_idf)
     np.save('../data/Y_train_tf_idf.npy', Y_train_encoded)
-    np.save('../data/X_test_tf_idf.npy', X_test_tf_idf)
-    np.save('../data/Y_test_tf_idf.npy', Y_test_encoded)
+    np.save('../data/X_validation_tf_idf.npy', X_validation_tf_idf)
+    np.save('../data/Y_validation_tf_idf.npy', Y_validation_encoded)
 
     joblib.dump(label_encoder, '../data/label_encoder_tf_idf.pkl')
 
