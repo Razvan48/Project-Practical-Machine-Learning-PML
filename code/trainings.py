@@ -5,6 +5,7 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import ConfusionMatrixDisplay
 import joblib
 from sklearn.cluster import Birch
+from scipy.optimize import linear_sum_assignment
 
 
 def train_svm_0(path):
@@ -59,11 +60,21 @@ def train_birch_0(path):
             Y_train_pred = birch.predict(X_train)
             Y_test_pred = birch.predict(X_test)
 
-            train_accuracy = accuracy_score(Y_train, Y_train_pred)
-            test_accuracy = accuracy_score(Y_test, Y_test_pred)
+            confusion_matrix_train = confusion_matrix(Y_train, Y_train_pred)
+            normalized_confusion_matrix_train = confusion_matrix_train / confusion_matrix_train.sum(axis=1, keepdims=True)
 
-            print(f'Birch Train Accuracy (threshold={threshold}, branching_factor={branching_factor}): {train_accuracy}')
-            print(f'Birch Test Accuracy (threshold={threshold}, branching_factor={branching_factor}): {test_accuracy}')
+            row_idx_sol, col_idx_sol = linear_sum_assignment(-normalized_confusion_matrix_train)
+            from_cluster_id_to_label = {col_idx: row_idx for row_idx, col_idx in zip(row_idx_sol, col_idx_sol)}
+
+            Y_train_pred_labels = np.array([from_cluster_id_to_label[cluster_id] for cluster_id in Y_train_pred])
+            Y_test_pred_labels = np.array([from_cluster_id_to_label[cluster_id] for cluster_id in Y_test_pred])
+
+            train_accuracy = accuracy_score(Y_train, Y_train_pred_labels)
+            test_accuracy = accuracy_score(Y_test, Y_test_pred_labels)
+
+            print(f'BIRCH threshold={threshold} branching_factor={branching_factor}')
+            print(f'Train Accuracy: {train_accuracy}')
+            print(f'Test Accuracy: {test_accuracy}')
 
 
 
