@@ -11,5 +11,5 @@ import trainings
 
 # trainings.train_svm_0('../data')
 
-# trainings.train_birch_0('../data')
+trainings.train_birch_0('../data')
 
