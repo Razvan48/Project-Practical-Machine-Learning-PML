@@ -7,6 +7,8 @@ import os
 import joblib
 from sklearn.cluster import Birch
 from scipy.optimize import linear_sum_assignment
+from skfuzzy.cluster import cmeans
+from skfuzzy.cluster import cmeans_predict
 
 
 def train_svm_0(path):
@@ -51,7 +53,7 @@ def train_birch_0(path):
     thresholds = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
     branching_factors = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
     num_clusters = len(label_encoder.classes_)
-    best_model = None
+    best_birch = None
     best_validation_accuracy = -1.0
 
     for threshold in thresholds:
@@ -81,11 +83,72 @@ def train_birch_0(path):
 
             if validation_accuracy > best_validation_accuracy:
                 best_validation_accuracy = validation_accuracy
-                best_model = birch
+                best_birch = birch
 
     print(f'Best BIRCH Validation Accuracy: {best_validation_accuracy}')
     os.makedirs(path + '/../models', exist_ok=True)
-    joblib.dump(best_model, path + f'/../models/birch_model_tf_idf_{best_validation_accuracy}.pkl')
+    joblib.dump(best_birch, path + f'/../models/birch_tf_idf_{best_validation_accuracy}.pkl')
+
+
+def train_fuzzy_c_mean_0(path):
+    
+    X_train = np.load(path + '/X_train_tf_idf.npy')
+    Y_train = np.load(path + '/Y_train_tf_idf.npy')
+    X_validation = np.load(path + '/X_validation_tf_idf.npy')
+    Y_validation = np.load(path + '/Y_validation_tf_idf.npy')
+
+    label_encoder = joblib.load(path + '/label_encoder_tf_idf.pkl')
+
+    print(f'X_train Shape: {X_train.shape}')
+    print(f'Y_train Shape: {Y_train.shape}')
+    print(f'X_validation Shape: {X_validation.shape}')
+    print(f'Y_validation Shape: {Y_validation.shape}')
+
+    num_clusters = len(label_encoder.classes_)
+    fuzziness_exponents = [3.0, 2.75, 2.5, 2.25, 2.0, 1.75, 1.5]
+    errors = [1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8]
+    max_iterations = [1000, 750, 500, 250, 100, 75, 50, 25, 10]
+    best_fuzzy_c_means = None
+    best_validation_accuracy = -1.0
+
+    for fuzziness_exponent in fuzziness_exponents:
+        for error in errors:
+            for max_iteration in max_iterations:
+                cluster_centers, membership_matrix_train, _, _, _, _, _ = cmeans(X_train.T, c=num_clusters, m=fuzziness_exponent, error=error, maxiter=max_iteration, init=None)
+                
+                Y_train_pred = np.argmax(membership_matrix_train, axis=0)
+
+                membership_matrix_validation, _, _, _, _, _ = cmeans_predict(X_validation.T, cluster_centers, m=fuzziness_exponent, error=error, maxiter=max_iteration)
+
+                Y_validation_pred = np.argmax(membership_matrix_validation, axis=0)
+
+                confusion_matrix_train = confusion_matrix(Y_train, Y_train_pred)
+                normalized_confusion_matrix_train = confusion_matrix_train / confusion_matrix_train.sum(axis=1, keepdims=True)
+
+                row_idx_sol, col_idx_sol = linear_sum_assignment(-normalized_confusion_matrix_train)
+                from_cluster_id_to_label = {col_idx: row_idx for row_idx, col_idx in zip(row_idx_sol, col_idx_sol)}
+
+                Y_train_pred_labels = np.array([from_cluster_id_to_label[cluster_id] for cluster_id in Y_train_pred])
+                Y_validation_pred_labels = np.array([from_cluster_id_to_label[cluster_id] for cluster_id in Y_validation_pred])
+
+                train_accuracy = accuracy_score(Y_train, Y_train_pred_labels)
+                validation_accuracy = accuracy_score(Y_validation, Y_validation_pred_labels)
+
+                print(f'Fuzzy C-Means fuzziness_exponent={fuzziness_exponent} error={error} max_iteration={max_iteration}')
+                print(f'Train Accuracy: {train_accuracy}')
+                print(f'Validation Accuracy: {validation_accuracy}')
+
+                if validation_accuracy > best_validation_accuracy:
+                    best_validation_accuracy = validation_accuracy
+                    best_fuzzy_c_means = (cluster_centers, fuzziness_exponent, error, max_iteration)
+
+    print(f'Best Fuzzy C-Means Validation Accuracy: {best_validation_accuracy}')
+    os.makedirs(path + '/../models', exist_ok=True)
+    joblib.dump(best_fuzzy_c_means, path + f'/../models/fuzzy_c_means_tf_idf_{best_validation_accuracy}.pkl')
+
+
+
+
 
 
 
