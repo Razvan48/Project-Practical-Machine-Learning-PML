@@ -13,5 +13,7 @@ import trainings
 
 # trainings.train_birch_0('../data')
 
+trainings.train_fuzzy_c_mean_0('../data')
+
 
 
