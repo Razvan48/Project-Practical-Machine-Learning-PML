@@ -3,6 +3,7 @@ from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import ConfusionMatrixDisplay
+import os
 import joblib
 from sklearn.cluster import Birch
 from scipy.optimize import linear_sum_assignment
@@ -83,6 +84,7 @@ def train_birch_0(path):
                 best_model = birch
 
     print(f'Best BIRCH Validation Accuracy: {best_validation_accuracy}')
+    os.makedirs(path + '/../models', exist_ok=True)
     joblib.dump(best_model, path + f'/../models/birch_model_tf_idf_{best_validation_accuracy}.pkl')
 
 

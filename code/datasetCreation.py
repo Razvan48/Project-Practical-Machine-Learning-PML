@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import LabelEncoder
 import numpy as np
+import os
 import joblib
 
 import dataVisualization
@@ -56,7 +57,10 @@ def create_tf_idf_dataset_0(csv_file_path):
     np.save('../data/X_validation_tf_idf.npy', X_validation_tf_idf)
     np.save('../data/Y_validation_tf_idf.npy', Y_validation_encoded)
 
+    os.makedirs('../data', exist_ok=True)
     joblib.dump(label_encoder, '../data/label_encoder_tf_idf.pkl')
+    
+
 
 
 
