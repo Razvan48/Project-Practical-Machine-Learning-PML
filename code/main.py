@@ -8,12 +8,13 @@ import trainings
 # dataVisualization.visualize_data_1('../data/emotion_dataset_raw.csv')
 
 # datasetCreation.create_tf_idf_dataset_0('../data/emotion_dataset_raw.csv')
+datasetCreation.create_fasttext_dataset_0('../data/emotion_dataset_raw.csv')
 
 # trainings.train_svm_0('../data')
 
 # trainings.train_birch_0('../data')
 
-trainings.train_fuzzy_c_mean_0('../data')
+# trainings.train_fuzzy_c_mean_0('../data')
 
 
 
