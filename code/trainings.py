@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import ConfusionMatrixDisplay
@@ -11,12 +12,37 @@ from skfuzzy.cluster import cmeans
 from skfuzzy.cluster import cmeans_predict
 
 
-def train_svm_0(path):
+def random_0(path, dataset_type):
 
-    X_train = np.load(path + '/X_train_tf_idf.npy')
-    Y_train = np.load(path + '/Y_train_tf_idf.npy')
-    X_validation = np.load(path + '/X_validation_tf_idf.npy')
-    Y_validation = np.load(path + '/Y_validation_tf_idf.npy')
+    X_train = np.load(path + f'/X_train_{dataset_type}.npy')
+    Y_train = np.load(path + f'/Y_train_{dataset_type}.npy')
+    X_validation = np.load(path + f'/X_validation_{dataset_type}.npy')
+    Y_validation = np.load(path + f'/Y_validation_{dataset_type}.npy')
+
+    print(f'X_train Shape: {X_train.shape}')
+    print(f'Y_train Shape: {Y_train.shape}')
+    print(f'X_validation Shape: {X_validation.shape}')
+    print(f'Y_validation Shape: {Y_validation.shape}')
+
+    labels, label_counts = np.unique(Y_train, return_counts=True)
+    label_probabilities = label_counts / np.sum(label_counts)
+
+    Y_train_pred = np.random.choice(labels, size=Y_train.shape[0], p=label_probabilities)
+    Y_validation_pred = np.random.choice(labels, size=Y_validation.shape[0], p=label_probabilities)
+
+    train_accuracy = accuracy_score(Y_train, Y_train_pred)
+    validation_accuracy = accuracy_score(Y_validation, Y_validation_pred)
+
+    print(f'Random Train Accuracy: {train_accuracy}')
+    print(f'Random Validation Accuracy: {validation_accuracy}')
+
+
+def train_svm_0(path, dataset_type):
+
+    X_train = np.load(path + f'/X_train_{dataset_type}.npy')
+    Y_train = np.load(path + f'/Y_train_{dataset_type}.npy')
+    X_validation = np.load(path + f'/X_validation_{dataset_type}.npy')
+    Y_validation = np.load(path + f'/Y_validation_{dataset_type}.npy')
 
     print(f'X_train Shape: {X_train.shape}')
     print(f'Y_train Shape: {Y_train.shape}')
@@ -36,14 +62,55 @@ def train_svm_0(path):
     print(f'SVM Validation Accuracy: {validation_accuracy}')
 
 
-def train_birch_0(path):
+def train_random_forest_0(path, dataset_type):
 
-    X_train = np.load(path + '/X_train_tf_idf.npy')
-    Y_train = np.load(path + '/Y_train_tf_idf.npy')
-    X_validation = np.load(path + '/X_validation_tf_idf.npy')
-    Y_validation = np.load(path + '/Y_validation_tf_idf.npy')
+    X_train = np.load(path + f'/X_train_{dataset_type}.npy')
+    Y_train = np.load(path + f'/Y_train_{dataset_type}.npy')
+    X_validation = np.load(path + f'/X_validation_{dataset_type}.npy')
+    Y_validation = np.load(path + f'/Y_validation_{dataset_type}.npy')
 
-    label_encoder = joblib.load(path + '/label_encoder_tf_idf.pkl')
+    print(f'X_train Shape: {X_train.shape}')
+    print(f'Y_train Shape: {Y_train.shape}')
+    print(f'X_validation Shape: {X_validation.shape}')
+    print(f'Y_validation Shape: {Y_validation.shape}')
+
+    max_depths = [5, 10, 15, 20, 30, 50, 70, 100, 200, None]
+    num_estimators = [200, 100, 70, 50, 20, 10]
+    best_random_forest = None
+    best_validation_accuracy = -1.0
+
+    for max_depth in max_depths:
+        for num_estimator in num_estimators:
+            random_forest = RandomForestClassifier(n_estimators=num_estimator, max_depth=max_depth, random_state=23)
+            random_forest.fit(X_train, Y_train)
+
+            Y_train_pred = random_forest.predict(X_train)
+            Y_validation_pred = random_forest.predict(X_validation)
+
+            train_accuracy = accuracy_score(Y_train, Y_train_pred)
+            validation_accuracy = accuracy_score(Y_validation, Y_validation_pred)
+
+            print(f'Random Forest max_depth={max_depth} num_estimator={num_estimator}')
+            print(f'Train Accuracy: {train_accuracy}')
+            print(f'Validation Accuracy: {validation_accuracy}')
+
+            if validation_accuracy > best_validation_accuracy:
+                best_validation_accuracy = validation_accuracy
+                best_random_forest = random_forest
+
+    print(f'Best Random Forest Validation Accuracy: {best_validation_accuracy}')
+    os.makedirs(path + '/../models', exist_ok=True)
+    joblib.dump(best_random_forest, path + f'/../models/random_forest_{dataset_type}_{best_validation_accuracy}.pkl')
+    
+
+def train_birch_0(path, dataset_type):
+
+    X_train = np.load(path + f'/X_train_{dataset_type}.npy')
+    Y_train = np.load(path + f'/Y_train_{dataset_type}.npy')
+    X_validation = np.load(path + f'/X_validation_{dataset_type}.npy')
+    Y_validation = np.load(path + f'/Y_validation_{dataset_type}.npy')
+
+    label_encoder = joblib.load(path + f'/label_encoder_{dataset_type}.pkl')
 
     print(f'X_train Shape: {X_train.shape}')
     print(f'Y_train Shape: {Y_train.shape}')
@@ -87,17 +154,17 @@ def train_birch_0(path):
 
     print(f'Best BIRCH Validation Accuracy: {best_validation_accuracy}')
     os.makedirs(path + '/../models', exist_ok=True)
-    joblib.dump(best_birch, path + f'/../models/birch_tf_idf_{best_validation_accuracy}.pkl')
+    joblib.dump(best_birch, path + f'/../models/birch_{dataset_type}_{best_validation_accuracy}.pkl')
 
 
-def train_fuzzy_c_mean_0(path):
+def train_fuzzy_c_mean_0(path, dataset_type):
     
-    X_train = np.load(path + '/X_train_tf_idf.npy')
-    Y_train = np.load(path + '/Y_train_tf_idf.npy')
-    X_validation = np.load(path + '/X_validation_tf_idf.npy')
-    Y_validation = np.load(path + '/Y_validation_tf_idf.npy')
+    X_train = np.load(path + f'/X_train_{dataset_type}.npy')
+    Y_train = np.load(path + f'/Y_train_{dataset_type}.npy')
+    X_validation = np.load(path + f'/X_validation_{dataset_type}.npy')
+    Y_validation = np.load(path + f'/Y_validation_{dataset_type}.npy')
 
-    label_encoder = joblib.load(path + '/label_encoder_tf_idf.pkl')
+    label_encoder = joblib.load(path + f'/label_encoder_{dataset_type}.pkl')
 
     print(f'X_train Shape: {X_train.shape}')
     print(f'Y_train Shape: {Y_train.shape}')
@@ -144,7 +211,7 @@ def train_fuzzy_c_mean_0(path):
 
     print(f'Best Fuzzy C-Means Validation Accuracy: {best_validation_accuracy}')
     os.makedirs(path + '/../models', exist_ok=True)
-    joblib.dump(best_fuzzy_c_means, path + f'/../models/fuzzy_c_means_tf_idf_{best_validation_accuracy}.pkl')
+    joblib.dump(best_fuzzy_c_means, path + f'/../models/fuzzy_c_means_{dataset_type}_{best_validation_accuracy}.pkl')
 
 
 

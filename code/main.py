@@ -8,13 +8,29 @@ import trainings
 # dataVisualization.visualize_data_1('../data/emotion_dataset_raw.csv')
 
 # datasetCreation.create_tf_idf_dataset_0('../data/emotion_dataset_raw.csv')
-datasetCreation.create_fasttext_dataset_0('../data/emotion_dataset_raw.csv')
+# datasetCreation.create_fasttext_dataset_0('../data/emotion_dataset_raw.csv')
 
-# trainings.train_svm_0('../data')
 
-# trainings.train_birch_0('../data')
 
-# trainings.train_fuzzy_c_mean_0('../data')
+# trainings.random_0('../data', dataset_type='tf_idf')
+
+# trainings.train_svm_0('../data', dataset_type='tf_idf')
+# trainings.train_random_forest_0('../data', dataset_type='tf_idf')
+
+# trainings.train_birch_0('../data', dataset_type='tf_idf')
+# trainings.train_fuzzy_c_mean_0('../data', dataset_type='tf_idf')
+
+
+
+# trainings.random_0('../data', dataset_type='fasttext')
+
+# trainings.train_svm_0('../data', dataset_type='fasttext')
+# trainings.train_random_forest_0('../data', dataset_type='fasttext')
+
+# trainings.train_birch_0('../data', dataset_type='fasttext')
+# trainings.train_fuzzy_c_mean_0('../data', dataset_type='fasttext')
+
+
 
 
 
