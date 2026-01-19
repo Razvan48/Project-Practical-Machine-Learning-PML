@@ -13,6 +13,12 @@ from skfuzzy.cluster import cmeans
 from skfuzzy.cluster import cmeans_predict
 
 
+RECURSION_LIMIT = 50000
+
+import sys
+sys.setrecursionlimit(RECURSION_LIMIT)
+
+
 def random_0(path, dataset_type):
 
     X_train = np.load(path + f'/X_train_{dataset_type}.npy')
@@ -86,6 +92,10 @@ def train_birch_0(path, dataset_type):
     X_validation = np.load(path + f'/X_validation_{dataset_type}.npy')
     Y_validation = np.load(path + f'/Y_validation_{dataset_type}.npy')
 
+    # permutation = np.random.permutation(2500)
+    # X_train = X_train[permutation]
+    # Y_train = Y_train[permutation]
+
     label_encoder = joblib.load(path + f'/label_encoder_{dataset_type}.pkl')
 
     print(f'X_train Shape: {X_train.shape}')
@@ -93,10 +103,19 @@ def train_birch_0(path, dataset_type):
     print(f'X_validation Shape: {X_validation.shape}')
     print(f'Y_validation Shape: {Y_validation.shape}')
 
-    thresholds = [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
-    branching_factors = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+    # thresholds = [0.4, 0.3, 0.2, 0.1, 0.05]
+    # branching_factors = [20, 40, 60, 80, 100]
+    
+    # thresholds = [0.5, 0.52, 0.55, 0.57, 0.6, 0.62, 0.65, 0.67, 0.7]
+    # branching_factors = [70, 72, 74, 76, 78, 80, 82, 84, 86, 88, 90]
+
+    thresholds = [0.2]
+    branching_factors = [20]
+
     num_clusters = len(label_encoder.classes_)
     best_birch = None
+    best_threshold = None
+    best_branching_factor = None
     best_validation_accuracy = -1.0
 
     for threshold in thresholds:
@@ -143,10 +162,16 @@ def train_birch_0(path, dataset_type):
             if validation_accuracy > best_validation_accuracy:
                 best_validation_accuracy = validation_accuracy
                 best_birch = birch
+                best_threshold = threshold
+                best_branching_factor = branching_factor
 
     print(f'Best BIRCH Validation Accuracy: {best_validation_accuracy}')
     os.makedirs(path + '/../models', exist_ok=True)
-    joblib.dump(best_birch, path + f'/../models/birch_{dataset_type}_{best_validation_accuracy}.pkl')
+    best_birch_parameters = {
+        'threshold': best_threshold,
+        'branching_factor': best_branching_factor
+    }
+    joblib.dump(best_birch_parameters, path + f'/../models/birch_{dataset_type}_{best_validation_accuracy}.pkl')
 
 
 def train_fuzzy_c_mean_0(path, dataset_type):
@@ -156,6 +181,10 @@ def train_fuzzy_c_mean_0(path, dataset_type):
     X_validation = np.load(path + f'/X_validation_{dataset_type}.npy')
     Y_validation = np.load(path + f'/Y_validation_{dataset_type}.npy')
 
+    # permutation = np.random.permutation(2500)
+    # X_train = X_train[permutation]
+    # Y_train = Y_train[permutation]
+
     label_encoder = joblib.load(path + f'/label_encoder_{dataset_type}.pkl')
 
     print(f'X_train Shape: {X_train.shape}')
@@ -164,18 +193,27 @@ def train_fuzzy_c_mean_0(path, dataset_type):
     print(f'Y_validation Shape: {Y_validation.shape}')
 
     num_clusters = len(label_encoder.classes_)
-    fuzziness_exponents = [3.0, 2.75, 2.5, 2.25, 2.0, 1.75, 1.5, 1.0]
-    errors = [1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8]
+    # fuzziness_exponents = [1.25, 1.2, 1.15, 1.1, 1.05, 1.03]
+    # errors = [1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8]
+
+    # fuzziness_exponents = [1.03, 1.02, 1.01, 1.005]
+    # errors = [1e-3, 1e-4, 1e-5, 1e-6]
+
+    fuzziness_exponents = [1.05]
+    errors = [1e-4]
+
     best_fuzzy_c_means = None
     best_validation_accuracy = -1.0
 
+    NUM_ITERATIONS = 1024
+
     for fuzziness_exponent in fuzziness_exponents:
         for error in errors:
-            cluster_centers, membership_matrix_train, _, _, _, _, _ = cmeans(X_train.T, c=num_clusters, m=fuzziness_exponent, error=error, init=None)
+            cluster_centers, membership_matrix_train, _, _, _, _, _ = cmeans(X_train.T, c=num_clusters, m=fuzziness_exponent, error=error, maxiter=NUM_ITERATIONS, init=None)
             
             Y_train_pred = np.argmax(membership_matrix_train, axis=0)
 
-            membership_matrix_validation, _, _, _, _, _ = cmeans_predict(X_validation.T, cluster_centers, m=fuzziness_exponent, error=error)
+            membership_matrix_validation, _, _, _, _, _ = cmeans_predict(X_validation.T, cluster_centers, m=fuzziness_exponent, error=error, maxiter=NUM_ITERATIONS)
 
             Y_validation_pred = np.argmax(membership_matrix_validation, axis=0)
 
@@ -217,7 +255,11 @@ def train_fuzzy_c_mean_0(path, dataset_type):
 
     print(f'Best Fuzzy C-Means Validation Accuracy: {best_validation_accuracy}')
     os.makedirs(path + '/../models', exist_ok=True)
-    joblib.dump(best_fuzzy_c_means, path + f'/../models/fuzzy_c_means_{dataset_type}_{best_validation_accuracy}.pkl')
+    best_fuzzy_c_means_parameters = {
+        'fuzziness_exponent': best_fuzzy_c_means[1],
+        'error': best_fuzzy_c_means[2]
+    }
+    joblib.dump(best_fuzzy_c_means_parameters, path + f'/../models/fuzzy_c_means_{dataset_type}_{best_validation_accuracy}.pkl')
 
 
 
