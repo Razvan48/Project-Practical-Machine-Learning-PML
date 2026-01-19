@@ -1,0 +1,6 @@
+X_train Shape: (24354, 128)
+Y_train Shape: (24354,)
+X_validation Shape: (10438, 128)
+Y_validation Shape: (10438,)
+Random Train Accuracy: 0.1985710766198571
+Random Validation Accuracy: 0.19036213834067828
