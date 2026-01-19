@@ -1,5 +1,4 @@
 import numpy as np
-from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
@@ -35,31 +34,6 @@ def random_0(path, dataset_type):
 
     print(f'Random Train Accuracy: {train_accuracy}')
     print(f'Random Validation Accuracy: {validation_accuracy}')
-
-
-def train_svm_0(path, dataset_type):
-
-    X_train = np.load(path + f'/X_train_{dataset_type}.npy')
-    Y_train = np.load(path + f'/Y_train_{dataset_type}.npy')
-    X_validation = np.load(path + f'/X_validation_{dataset_type}.npy')
-    Y_validation = np.load(path + f'/Y_validation_{dataset_type}.npy')
-
-    print(f'X_train Shape: {X_train.shape}')
-    print(f'Y_train Shape: {Y_train.shape}')
-    print(f'X_validation Shape: {X_validation.shape}')
-    print(f'Y_validation Shape: {Y_validation.shape}')
-
-    svc = SVC(kernel='rbf', C=10.0, random_state=23)
-    svc.fit(X_train, Y_train)
-
-    Y_train_pred = svc.predict(X_train)
-    Y_validation_pred = svc.predict(X_validation)
-
-    train_accuracy = accuracy_score(Y_train, Y_train_pred)
-    validation_accuracy = accuracy_score(Y_validation, Y_validation_pred)
-
-    print(f'SVM Train Accuracy: {train_accuracy}')
-    print(f'SVM Validation Accuracy: {validation_accuracy}')
 
 
 def train_random_forest_0(path, dataset_type):
@@ -117,7 +91,7 @@ def train_birch_0(path, dataset_type):
     print(f'X_validation Shape: {X_validation.shape}')
     print(f'Y_validation Shape: {Y_validation.shape}')
 
-    thresholds = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+    thresholds = [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
     branching_factors = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
     num_clusters = len(label_encoder.classes_)
     best_birch = None
@@ -172,42 +146,40 @@ def train_fuzzy_c_mean_0(path, dataset_type):
     print(f'Y_validation Shape: {Y_validation.shape}')
 
     num_clusters = len(label_encoder.classes_)
-    fuzziness_exponents = [3.0, 2.75, 2.5, 2.25, 2.0, 1.75, 1.5]
+    fuzziness_exponents = [3.0, 2.75, 2.5, 2.25, 2.0, 1.75, 1.5, 1.0]
     errors = [1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8]
-    max_iterations = [1000, 750, 500, 250, 100, 75, 50, 25, 10]
     best_fuzzy_c_means = None
     best_validation_accuracy = -1.0
 
     for fuzziness_exponent in fuzziness_exponents:
         for error in errors:
-            for max_iteration in max_iterations:
-                cluster_centers, membership_matrix_train, _, _, _, _, _ = cmeans(X_train.T, c=num_clusters, m=fuzziness_exponent, error=error, maxiter=max_iteration, init=None)
-                
-                Y_train_pred = np.argmax(membership_matrix_train, axis=0)
+            cluster_centers, membership_matrix_train, _, _, _, _, _ = cmeans(X_train.T, c=num_clusters, m=fuzziness_exponent, error=error, init=None)
+            
+            Y_train_pred = np.argmax(membership_matrix_train, axis=0)
 
-                membership_matrix_validation, _, _, _, _, _ = cmeans_predict(X_validation.T, cluster_centers, m=fuzziness_exponent, error=error, maxiter=max_iteration)
+            membership_matrix_validation, _, _, _, _, _ = cmeans_predict(X_validation.T, cluster_centers, m=fuzziness_exponent, error=error)
 
-                Y_validation_pred = np.argmax(membership_matrix_validation, axis=0)
+            Y_validation_pred = np.argmax(membership_matrix_validation, axis=0)
 
-                confusion_matrix_train = confusion_matrix(Y_train, Y_train_pred)
-                normalized_confusion_matrix_train = confusion_matrix_train / confusion_matrix_train.sum(axis=1, keepdims=True)
+            confusion_matrix_train = confusion_matrix(Y_train, Y_train_pred)
+            normalized_confusion_matrix_train = confusion_matrix_train / confusion_matrix_train.sum(axis=1, keepdims=True)
 
-                row_idx_sol, col_idx_sol = linear_sum_assignment(-normalized_confusion_matrix_train)
-                from_cluster_id_to_label = {col_idx: row_idx for row_idx, col_idx in zip(row_idx_sol, col_idx_sol)}
+            row_idx_sol, col_idx_sol = linear_sum_assignment(-normalized_confusion_matrix_train)
+            from_cluster_id_to_label = {col_idx: row_idx for row_idx, col_idx in zip(row_idx_sol, col_idx_sol)}
 
-                Y_train_pred_labels = np.array([from_cluster_id_to_label[cluster_id] for cluster_id in Y_train_pred])
-                Y_validation_pred_labels = np.array([from_cluster_id_to_label[cluster_id] for cluster_id in Y_validation_pred])
+            Y_train_pred_labels = np.array([from_cluster_id_to_label[cluster_id] for cluster_id in Y_train_pred])
+            Y_validation_pred_labels = np.array([from_cluster_id_to_label[cluster_id] for cluster_id in Y_validation_pred])
 
-                train_accuracy = accuracy_score(Y_train, Y_train_pred_labels)
-                validation_accuracy = accuracy_score(Y_validation, Y_validation_pred_labels)
+            train_accuracy = accuracy_score(Y_train, Y_train_pred_labels)
+            validation_accuracy = accuracy_score(Y_validation, Y_validation_pred_labels)
 
-                print(f'Fuzzy C-Means fuzziness_exponent={fuzziness_exponent} error={error} max_iteration={max_iteration}')
-                print(f'Train Accuracy: {train_accuracy}')
-                print(f'Validation Accuracy: {validation_accuracy}')
+            print(f'Fuzzy C-Means fuzziness_exponent={fuzziness_exponent} error={error}')
+            print(f'Train Accuracy: {train_accuracy}')
+            print(f'Validation Accuracy: {validation_accuracy}')
 
-                if validation_accuracy > best_validation_accuracy:
-                    best_validation_accuracy = validation_accuracy
-                    best_fuzzy_c_means = (cluster_centers, fuzziness_exponent, error, max_iteration)
+            if validation_accuracy > best_validation_accuracy:
+                best_validation_accuracy = validation_accuracy
+                best_fuzzy_c_means = (cluster_centers, fuzziness_exponent, error)
 
     print(f'Best Fuzzy C-Means Validation Accuracy: {best_validation_accuracy}')
     os.makedirs(path + '/../models', exist_ok=True)
