@@ -2,6 +2,9 @@ import dataVisualization
 import datasetCreation
 import trainings
 
+import warnings
+warnings.filterwarnings('ignore')
+
 
 # dataVisualization.is_data_valid('../data/emotion_dataset_raw.csv')
 # dataVisualization.visualize_data_0('../data/emotion_dataset_raw.csv')
@@ -25,7 +28,7 @@ import trainings
 
 # trainings.train_random_forest_0('../data', dataset_type='fasttext')
 
-# trainings.train_birch_0('../data', dataset_type='fasttext')
+trainings.train_birch_0('../data', dataset_type='fasttext')
 # trainings.train_fuzzy_c_mean_0('../data', dataset_type='fasttext')
 
 
