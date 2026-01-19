@@ -1,0 +1,182 @@
+
+X_train Shape: (24354, 128)
+Y_train Shape: (24354,)
+X_validation Shape: (10438, 128)
+Y_validation Shape: (10438,)
+BIRCH threshold=0.4 branching_factor=20
+Train Accuracy: 0.09793052475979305
+Validation Accuracy: 0.0966660279747078
+Train NMI: 0.015042655257395319
+Validation NMI: 0.01489453500567478
+Train Silhouette Score: 0.07822389881287778
+Validation Silhouette Score: 0.0752737731952157
+BIRCH threshold=0.4 branching_factor=40
+Train Accuracy: 0.15627822944896116
+Validation Accuracy: 0.1549147346234911
+Train NMI: 0.01957178412907922
+Validation NMI: 0.01874421762513365
+Train Silhouette Score: 0.07247026785805168
+Validation Silhouette Score: 0.06915356495148843
+BIRCH threshold=0.4 branching_factor=60
+Train Accuracy: 0.11743450767841011
+Validation Accuracy: 0.11525196397777351
+Train NMI: 0.019177924641513498
+Validation NMI: 0.017956744155282624
+Train Silhouette Score: 0.080145620143024
+Validation Silhouette Score: 0.07575304882307607
+BIRCH threshold=0.4 branching_factor=80
+Train Accuracy: 0.16136979551613698
+Validation Accuracy: 0.15606438014945392
+Train NMI: 0.023255302974781136
+Validation NMI: 0.022100982342088397
+Train Silhouette Score: 0.07747084878668446
+Validation Silhouette Score: 0.07485544422555233
+BIRCH threshold=0.4 branching_factor=100
+Train Accuracy: 0.0930442637759711
+Validation Accuracy: 0.08584019927189117
+Train NMI: 0.01206831332742861
+Validation NMI: 0.010439259985106256
+Train Silhouette Score: 0.0760401178007484
+Validation Silhouette Score: 0.07386012103879534
+BIRCH threshold=0.3 branching_factor=20
+Train Accuracy: 0.1308614601297528
+Validation Accuracy: 0.12770645717570417
+Train NMI: 0.02550917538883943
+Validation NMI: 0.021711162051703994
+Train Silhouette Score: 0.037642424356341644
+Validation Silhouette Score: 0.03389280417245549
+BIRCH threshold=0.3 branching_factor=40
+Train Accuracy: 0.14556130409788948
+Validation Accuracy: 0.14571757041578848
+Train NMI: 0.01695118140713686
+Validation NMI: 0.016792115358653117
+Train Silhouette Score: 0.07782865176882602
+Validation Silhouette Score: 0.07569311975134592
+BIRCH threshold=0.3 branching_factor=60
+Train Accuracy: 0.09497413155949741
+Validation Accuracy: 0.09446254071661238
+Train NMI: 0.022857552018949078
+Validation NMI: 0.021709073360415214
+Train Silhouette Score: 0.07248906274768437
+Validation Silhouette Score: 0.06988750205682262
+BIRCH threshold=0.3 branching_factor=80
+Train Accuracy: 0.15549807013221648
+Validation Accuracy: 0.1511783866641119
+Train NMI: 0.015809185943661905
+Validation NMI: 0.015177519047185768
+Train Silhouette Score: 0.046460121704049916
+Validation Silhouette Score: 0.042536802117784364
+BIRCH threshold=0.3 branching_factor=100
+Train Accuracy: 0.12663217541266322
+Validation Accuracy: 0.1254071661237785
+Train NMI: 0.02513474071881835
+Validation NMI: 0.02109064547973338
+Train Silhouette Score: -0.008460105665384464
+Validation Silhouette Score: -0.01446346600711519
+BIRCH threshold=0.2 branching_factor=20
+Train Accuracy: 0.22538392050587172
+Validation Accuracy: 0.21613335888101168
+Train NMI: 0.02950956870664245
+Validation NMI: 0.02419628757334492
+Train Silhouette Score: 0.04803377896556602
+Validation Silhouette Score: 0.047087462546611634
+BIRCH threshold=0.2 branching_factor=40
+Train Accuracy: 0.17652131066765214
+Validation Accuracy: 0.17225522130676374
+Train NMI: 0.020732422424847255
+Validation NMI: 0.02063378376441003
+Train Silhouette Score: 0.075480510734804
+Validation Silhouette Score: 0.07195767920967747
+BIRCH threshold=0.2 branching_factor=60
+Train Accuracy: 0.10092797897675947
+Validation Accuracy: 0.10222264801686147
+Train NMI: 0.02286167359239466
+Validation NMI: 0.023410252921947924
+Train Silhouette Score: 0.03402194221389822
+Validation Silhouette Score: 0.030994497443778735
+BIRCH threshold=0.2 branching_factor=80
+Train Accuracy: 0.1254414059292108
+Validation Accuracy: 0.1259819888867599
+Train NMI: 0.019621254565371674
+Validation NMI: 0.018785426807176472
+Train Silhouette Score: 0.07964826154727755
+Validation Silhouette Score: 0.07705856086505578
+BIRCH threshold=0.2 branching_factor=100
+Train Accuracy: 0.13517286688018396
+Validation Accuracy: 0.13584977965127418
+Train NMI: 0.025301138065716277
+Validation NMI: 0.02299313137068806
+Train Silhouette Score: 0.06713898747602753
+Validation Silhouette Score: 0.06394174472885263
+BIRCH threshold=0.1 branching_factor=20
+Train Accuracy: 0.1976677342531001
+Validation Accuracy: 0.19840965702241808
+Train NMI: 0.021062799493565904
+Validation NMI: 0.02170498228902297
+Train Silhouette Score: 0.06260035824438594
+Validation Silhouette Score: 0.05958753845830093
+BIRCH threshold=0.1 branching_factor=40
+Train Accuracy: 0.21737702225507102
+Validation Accuracy: 0.21191799195248132
+Train NMI: 0.02965460683645476
+Validation NMI: 0.027104628869128896
+Train Silhouette Score: -0.02202346511935653
+Validation Silhouette Score: -0.02711779341985086
+BIRCH threshold=0.1 branching_factor=60
+Train Accuracy: 0.18354274451835428
+Validation Accuracy: 0.18202720827744778
+Train NMI: 0.02791620105831816
+Validation NMI: 0.026006542549884697
+Train Silhouette Score: -0.01596388305420485
+Validation Silhouette Score: -0.020762192667810247
+BIRCH threshold=0.1 branching_factor=80
+Train Accuracy: 0.09131970107579863
+Validation Accuracy: 0.09542057865491474
+Train NMI: 0.01431479504748352
+Validation NMI: 0.016039676796059842
+Train Silhouette Score: 0.08373736244911532
+Validation Silhouette Score: 0.07971970731916957
+BIRCH threshold=0.1 branching_factor=100
+Train Accuracy: 0.16999260901699925
+Validation Accuracy: 0.16775244299674266
+Train NMI: 0.021857226983207433
+Validation NMI: 0.02319616945835346
+Train Silhouette Score: 0.06349893978849659
+Validation Silhouette Score: 0.05963578575899275
+BIRCH threshold=0.05 branching_factor=20
+Train Accuracy: 0.024554487969122116
+Validation Accuracy: 0.024429967426710098
+Train NMI: 0.012040544631462717
+Validation NMI: 0.013465303631226725
+Train Silhouette Score: 0.08542089205423127
+Validation Silhouette Score: 0.0811405111243093
+BIRCH threshold=0.05 branching_factor=40
+Train Accuracy: 0.09058060277572473
+Validation Accuracy: 0.09005556620042153
+Train NMI: 0.014290974207935115
+Validation NMI: 0.015546595091176849
+Train Silhouette Score: 0.07910261279522147
+Validation Silhouette Score: 0.07631937962174527
+BIRCH threshold=0.05 branching_factor=60
+Train Accuracy: 0.09854644000985464
+Validation Accuracy: 0.09982755317110557
+Train NMI: 0.0190853264108468
+Validation NMI: 0.020649358695530338
+Train Silhouette Score: 0.08538908253034877
+Validation Silhouette Score: 0.08150166840551192
+BIRCH threshold=0.05 branching_factor=80
+Train Accuracy: 0.17060852426706086
+Validation Accuracy: 0.16861467714121478
+Train NMI: 0.024249538799237497
+Validation NMI: 0.026783392544792797
+Train Silhouette Score: 0.0749945494412727
+Validation Silhouette Score: 0.07111971218798595
+BIRCH threshold=0.05 branching_factor=100
+Train Accuracy: 0.12519503982918617
+Validation Accuracy: 0.12828127993868557
+Train NMI: 0.02238889059267401
+Validation NMI: 0.02405073856773487
+Train Silhouette Score: 0.053469184975876646
+Validation Silhouette Score: 0.04951171967359444
+Best BIRCH Validation Accuracy: 0.21613335888101168
+
