@@ -123,8 +123,14 @@ def train_birch_0(path, dataset_type):
             train_nmi = normalized_mutual_info_score(Y_train, Y_train_pred_labels)
             validation_nmi = normalized_mutual_info_score(Y_validation, Y_validation_pred_labels)
 
-            train_silhouette_score = silhouette_score(X_train, Y_train_pred)
-            validation_silhouette_score = silhouette_score(X_validation, Y_validation_pred)
+            if len(np.unique(Y_train_pred)) >= 2:
+                train_silhouette_score = silhouette_score(X_train, Y_train_pred)
+            else:
+                train_silhouette_score = None
+            if len(np.unique(Y_validation_pred)) >= 2:
+                validation_silhouette_score = silhouette_score(X_validation, Y_validation_pred)
+            else:
+                validation_silhouette_score = None
 
             print(f'BIRCH threshold={threshold} branching_factor={branching_factor}')
             print(f'Train Accuracy: {train_accuracy}')
@@ -188,8 +194,14 @@ def train_fuzzy_c_mean_0(path, dataset_type):
             train_nmi = normalized_mutual_info_score(Y_train, Y_train_pred_labels)
             validation_nmi = normalized_mutual_info_score(Y_validation, Y_validation_pred_labels)
 
-            train_silhouette_score = silhouette_score(X_train, Y_train_pred)
-            validation_silhouette_score = silhouette_score(X_validation, Y_validation_pred)
+            if len(np.unique(Y_train_pred)) >= 2:
+                train_silhouette_score = silhouette_score(X_train, Y_train_pred)
+            else:
+                train_silhouette_score = None
+            if len(np.unique(Y_validation_pred)) >= 2:
+                validation_silhouette_score = silhouette_score(X_validation, Y_validation_pred)
+            else:
+                validation_silhouette_score = None
 
             print(f'Fuzzy C-Means fuzziness_exponent={fuzziness_exponent} error={error}')
             print(f'Train Accuracy: {train_accuracy}')
