@@ -1,6 +1,8 @@
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import normalized_mutual_info_score
+from sklearn.metrics import silhouette_score
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import ConfusionMatrixDisplay
 import os
@@ -118,9 +120,19 @@ def train_birch_0(path, dataset_type):
             train_accuracy = accuracy_score(Y_train, Y_train_pred_labels)
             validation_accuracy = accuracy_score(Y_validation, Y_validation_pred_labels)
 
+            train_nmi = normalized_mutual_info_score(Y_train, Y_train_pred_labels)
+            validation_nmi = normalized_mutual_info_score(Y_validation, Y_validation_pred_labels)
+
+            train_silhouette_score = silhouette_score(X_train, Y_train_pred)
+            validation_silhouette_score = silhouette_score(X_validation, Y_validation_pred)
+
             print(f'BIRCH threshold={threshold} branching_factor={branching_factor}')
             print(f'Train Accuracy: {train_accuracy}')
             print(f'Validation Accuracy: {validation_accuracy}')
+            print(f'Train NMI: {train_nmi}')
+            print(f'Validation NMI: {validation_nmi}')
+            print(f'Train Silhouette Score: {train_silhouette_score}')
+            print(f'Validation Silhouette Score: {validation_silhouette_score}')
 
             if validation_accuracy > best_validation_accuracy:
                 best_validation_accuracy = validation_accuracy
@@ -173,9 +185,19 @@ def train_fuzzy_c_mean_0(path, dataset_type):
             train_accuracy = accuracy_score(Y_train, Y_train_pred_labels)
             validation_accuracy = accuracy_score(Y_validation, Y_validation_pred_labels)
 
+            train_nmi = normalized_mutual_info_score(Y_train, Y_train_pred_labels)
+            validation_nmi = normalized_mutual_info_score(Y_validation, Y_validation_pred_labels)
+
+            train_silhouette_score = silhouette_score(X_train, Y_train_pred)
+            validation_silhouette_score = silhouette_score(X_validation, Y_validation_pred)
+
             print(f'Fuzzy C-Means fuzziness_exponent={fuzziness_exponent} error={error}')
             print(f'Train Accuracy: {train_accuracy}')
             print(f'Validation Accuracy: {validation_accuracy}')
+            print(f'Train NMI: {train_nmi}')
+            print(f'Validation NMI: {validation_nmi}')
+            print(f'Train Silhouette Score: {train_silhouette_score}')
+            print(f'Validation Silhouette Score: {validation_silhouette_score}')
 
             if validation_accuracy > best_validation_accuracy:
                 best_validation_accuracy = validation_accuracy
