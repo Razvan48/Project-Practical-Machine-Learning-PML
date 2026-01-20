@@ -8,6 +8,10 @@ from sklearn.cluster import Birch
 from skfuzzy.cluster import cmeans
 from skfuzzy.cluster import cmeans_predict
 from sklearn.manifold import TSNE
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+from sklearn.metrics import f1_score
 
 
 def visualize_birch_0(root_path, model_name, dataset_type):
@@ -84,6 +88,30 @@ def visualize_birch_0(root_path, model_name, dataset_type):
     plt.savefig(root_path + f'/plots/{model_name}_tsne_visualization_validation_predicted.png')
     plt.show()
 
+    train_accuracy = accuracy_score(Y_train, Y_train_pred_labels)
+    validation_accuracy = accuracy_score(Y_validation, Y_validation_pred_labels)
+
+    train_precision = precision_score(Y_train, Y_train_pred_labels, average=None, zero_division=0)
+    validation_precision = precision_score(Y_validation, Y_validation_pred_labels, average=None, zero_division=0)
+
+    train_recall = recall_score(Y_train, Y_train_pred_labels, average=None, zero_division=0)
+    validation_recall = recall_score(Y_validation, Y_validation_pred_labels, average=None, zero_division=0)
+
+    train_f1_score = f1_score(Y_train, Y_train_pred_labels, average='weighted', zero_division=0)
+    validation_f1_score = f1_score(Y_validation, Y_validation_pred_labels, average='weighted', zero_division=0)
+
+    print(f'Train Accuracy: {train_accuracy}')
+    print(f'Validation Accuracy: {validation_accuracy}')
+
+    print(f'Train Precision: {train_precision}')
+    print(f'Validation Precision: {validation_precision}')
+
+    print(f'Train Recall: {train_recall}')
+    print(f'Validation Recall: {validation_recall}')
+
+    print(f'Train F1-Score: {train_f1_score}')
+    print(f'Validation F1-Score: {validation_f1_score}')
+
 
 def visualize_fuzzy_c_mean_0(root_path, model_name, dataset_type):
 
@@ -144,5 +172,54 @@ def visualize_fuzzy_c_mean_0(root_path, model_name, dataset_type):
     plt.title('Fuzzy C-Means Validation Confusion Matrix')
     plt.savefig(root_path + f'/plots/{model_name}_confusion_matrix_validation.png')
     plt.show()
+
+    tsne = TSNE(n_components=2, random_state=23)
+    X_validation_tsne = tsne.fit_transform(X_validation)
+
+    plt.figure(figsize=(10, 8))
+    for label in range(len(label_encoder.classes_)):
+        X_label = X_validation_tsne[Y_validation == label]
+        plt.scatter(X_label[:, 0], X_label[:, 1], label=label_encoder.classes_[label], alpha=0.6)
+    plt.title('Fuzzy C-Means Validation t-SNE Visualization (True Labels)')
+    plt.xlabel('X')
+    plt.ylabel('Y')
+    plt.legend()
+    plt.savefig(root_path + f'/plots/{model_name}_tsne_visualization_validation_true.png')
+    plt.show()
+
+    plt.figure(figsize=(10, 8))
+    for label in range(len(label_encoder.classes_)):
+        X_label = X_validation_tsne[Y_validation_pred_labels == label]
+        plt.scatter(X_label[:, 0], X_label[:, 1], label=label_encoder.classes_[label], alpha=0.6)
+    plt.title('Fuzzy C-Means Validation t-SNE Visualization (Predicted Labels)')
+    plt.xlabel('X')
+    plt.ylabel('Y')
+    plt.legend()
+    plt.savefig(root_path + f'/plots/{model_name}_tsne_visualization_validation_predicted.png')
+    plt.show()
+
+    train_accuracy = accuracy_score(Y_train, Y_train_pred_labels)
+    validation_accuracy = accuracy_score(Y_validation, Y_validation_pred_labels)
+
+    train_precision = precision_score(Y_train, Y_train_pred_labels, average=None, zero_division=0)
+    validation_precision = precision_score(Y_validation, Y_validation_pred_labels, average=None, zero_division=0)
+
+    train_recall = recall_score(Y_train, Y_train_pred_labels, average=None, zero_division=0)
+    validation_recall = recall_score(Y_validation, Y_validation_pred_labels, average=None, zero_division=0)
+
+    train_f1_score = f1_score(Y_train, Y_train_pred_labels, average='weighted', zero_division=0)
+    validation_f1_score = f1_score(Y_validation, Y_validation_pred_labels, average='weighted', zero_division=0)
+
+    print(f'Train Accuracy: {train_accuracy}')
+    print(f'Validation Accuracy: {validation_accuracy}')
+
+    print(f'Train Precision: {train_precision}')
+    print(f'Validation Precision: {validation_precision}')
+
+    print(f'Train Recall: {train_recall}')
+    print(f'Validation Recall: {validation_recall}')
+
+    print(f'Train F1-Score: {train_f1_score}')
+    print(f'Validation F1-Score: {validation_f1_score}')
     
 

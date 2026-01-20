@@ -53,13 +53,15 @@ def create_tf_idf_dataset_0(csv_file_path):
     print(f'X_validation_tf_idf Shape: {X_validation_tf_idf.shape}')
     print(f'Y_validation_encoded Shape: {Y_validation_encoded.shape}')
 
+    os.makedirs('../data', exist_ok=True)
+
     np.save('../data/X_train_tf_idf.npy', X_train_tf_idf)
     np.save('../data/Y_train_tf_idf.npy', Y_train_encoded)
     np.save('../data/X_validation_tf_idf.npy', X_validation_tf_idf)
     np.save('../data/Y_validation_tf_idf.npy', Y_validation_encoded)
 
-    os.makedirs('../data', exist_ok=True)
     joblib.dump(label_encoder, '../data/label_encoder_tf_idf.pkl')
+    joblib.dump(tf_idf_vectorizer, '../data/tf_idf_vectorizer.pkl')
 
 
 def create_fasttext_dataset_0(csv_file_path):
@@ -111,12 +113,13 @@ def create_fasttext_dataset_0(csv_file_path):
     print(f'X_validation Shape: {X_validation.shape}')
     print(f'Y_validation_encoded Shape: {Y_validation_encoded.shape}')
 
+    os.makedirs('../data', exist_ok=True)
+
     np.save('../data/X_train_fasttext.npy', X_train)
     np.save('../data/Y_train_fasttext.npy', Y_train_encoded)
     np.save('../data/X_validation_fasttext.npy', X_validation)
     np.save('../data/Y_validation_fasttext.npy', Y_validation_encoded)
 
-    os.makedirs('../data', exist_ok=True)
     joblib.dump(label_encoder, '../data/label_encoder_fasttext.pkl')
     
 
