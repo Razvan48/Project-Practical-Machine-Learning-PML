@@ -22,6 +22,7 @@ def visualize_birch_0(root_path, model_name, dataset_type):
     Y_validation = np.load(root_path + f'/data/Y_validation_{dataset_type}.npy')
 
     label_encoder = joblib.load(root_path + f'/data/label_encoder_{dataset_type}.pkl')
+    tf_idf_vectorizer = joblib.load(root_path + f'/data/tf_idf_vectorizer.pkl')
 
     print(f'X_train Shape: {X_train.shape}')
     print(f'Y_train Shape: {Y_train.shape}')
@@ -111,6 +112,17 @@ def visualize_birch_0(root_path, model_name, dataset_type):
 
     print(f'Train F1-Score: {train_f1_score}')
     print(f'Validation F1-Score: {validation_f1_score}')
+
+    TOP_K_MOST_SIGNIFICANT_TF_IDF_FEATURES = 10
+    for label in range(len(label_encoder.classes_)):
+        X_label = X_validation[Y_validation_pred_labels == label]
+        tf_idf_counts_mean = np.mean(X_label, axis=0)
+        top_k_feature_indices = np.argsort(tf_idf_counts_mean)[-TOP_K_MOST_SIGNIFICANT_TF_IDF_FEATURES:][::-1]
+        print(f'Top {TOP_K_MOST_SIGNIFICANT_TF_IDF_FEATURES} TF-IDF Features for Emotion {label_encoder.classes_[label]}')
+        for feature_index in top_k_feature_indices:
+            feature_name = tf_idf_vectorizer.get_feature_names_out()[feature_index]
+            feature_value = tf_idf_counts_mean[feature_index]
+            print(f'{feature_name} with frequency {feature_value}')
 
 
 def visualize_fuzzy_c_mean_0(root_path, model_name, dataset_type):
