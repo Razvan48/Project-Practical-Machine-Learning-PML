@@ -93,8 +93,12 @@ def train_birch_0(path, dataset_type):
     print(f'X_validation Shape: {X_validation.shape}')
     print(f'Y_validation Shape: {Y_validation.shape}')
 
-    thresholds = [0.3, 0.2, 0.1, 0.05]
-    branching_factors = [20, 40, 50, 70]
+    if dataset_type == 'tf_idf':
+        thresholds = [0.3, 0.2, 0.1, 0.05]
+        branching_factors = [20, 40, 50, 70]
+    else:
+        thresholds = [0.1, 0.05, 0.03, 0.01]
+        branching_factors = [40, 70, 90, 120]
 
     num_clusters = len(label_encoder.classes_)
     best_birch = None
@@ -181,10 +185,6 @@ def train_fuzzy_c_mean_0(path, dataset_type):
     X_validation = np.load(path + f'/X_validation_{dataset_type}.npy')
     Y_validation = np.load(path + f'/Y_validation_{dataset_type}.npy')
 
-    # permutation = np.random.permutation(2500)
-    # X_train = X_train[permutation]
-    # Y_train = Y_train[permutation]
-
     label_encoder = joblib.load(path + f'/label_encoder_{dataset_type}.pkl')
 
     print(f'X_train Shape: {X_train.shape}')
@@ -193,14 +193,8 @@ def train_fuzzy_c_mean_0(path, dataset_type):
     print(f'Y_validation Shape: {Y_validation.shape}')
 
     num_clusters = len(label_encoder.classes_)
-    # fuzziness_exponents = [1.25, 1.2, 1.15, 1.1, 1.05, 1.03]
-    # errors = [1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8]
-
-    # fuzziness_exponents = [1.03, 1.02, 1.01, 1.005]
-    # errors = [1e-3, 1e-4, 1e-5, 1e-6]
-
-    fuzziness_exponents = [1.05]
-    errors = [1e-4]
+    fuzziness_exponents = [1.5, 1.25, 1.1, 1.05]
+    errors = [1e-2, 1e-3, 1e-4, 1e-5]
 
     best_fuzzy_c_means = None
     best_validation_accuracy = -1.0
