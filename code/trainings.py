@@ -193,8 +193,12 @@ def train_fuzzy_c_mean_0(path, dataset_type):
     print(f'Y_validation Shape: {Y_validation.shape}')
 
     num_clusters = len(label_encoder.classes_)
-    fuzziness_exponents = [1.5, 1.25, 1.1, 1.05]
-    errors = [1e-2, 1e-3, 1e-4, 1e-5]
+    if dataset_type == 'tf_idf':
+        fuzziness_exponents = [1.5, 1.25, 1.1, 1.05]
+        errors = [1e-2, 1e-3, 1e-4, 1e-5]
+    else:
+        fuzziness_exponents = [1.5, 1.25, 1.1, 1.05]
+        errors = [1e-2, 1e-3, 1e-4, 1e-5]
 
     best_fuzzy_c_means = None
     best_validation_accuracy = -1.0
