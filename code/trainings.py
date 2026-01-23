@@ -31,11 +31,10 @@ def random_0(path, dataset_type):
     print(f'X_validation Shape: {X_validation.shape}')
     print(f'Y_validation Shape: {Y_validation.shape}')
 
-    labels, label_counts = np.unique(Y_train, return_counts=True)
-    label_probabilities = label_counts / np.sum(label_counts)
+    labels = np.unique(Y_train)
 
-    Y_train_pred = np.random.choice(labels, size=Y_train.shape[0], p=label_probabilities)
-    Y_validation_pred = np.random.choice(labels, size=Y_validation.shape[0], p=label_probabilities)
+    Y_train_pred = np.random.choice(labels, size=Y_train.shape[0])
+    Y_validation_pred = np.random.choice(labels, size=Y_validation.shape[0])
 
     train_accuracy = accuracy_score(Y_train, Y_train_pred)
     validation_accuracy = accuracy_score(Y_validation, Y_validation_pred)
