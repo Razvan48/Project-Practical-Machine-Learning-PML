@@ -1,0 +1,118 @@
+X_train Shape: (24354, 128)
+Y_train Shape: (24354,)
+X_validation Shape: (10438, 128)
+Y_validation Shape: (10438,)
+Fuzzy C-Means fuzziness_exponent=1.5 error=0.01
+Train Accuracy: 0.1462593413812926
+Validation Accuracy: 0.14226863383789998
+Train NMI: 0.019442640910788792
+Validation NMI: 0.017646501359198246
+Train Silhouette Score: 0.03431958676391368
+Validation Silhouette Score: 0.03132966772891596
+Fuzzy C-Means fuzziness_exponent=1.5 error=0.001
+Train Accuracy: 0.19208343598587502
+Validation Accuracy: 0.19036213834067828
+Train NMI: 0.01917505653816136
+Validation NMI: 0.018287522622131198
+Train Silhouette Score: 0.03272055780507817
+Validation Silhouette Score: 0.03315391607079111
+Fuzzy C-Means fuzziness_exponent=1.5 error=0.0001
+Train Accuracy: 0.1250307957625031
+Validation Accuracy: 0.12186242575205979
+Train NMI: 0.019520410840140973
+Validation NMI: 0.019058530287347705
+Train Silhouette Score: 0.03436453809409278
+Validation Silhouette Score: 0.025776394039904532
+Fuzzy C-Means fuzziness_exponent=1.5 error=1e-05
+Train Accuracy: 0.2101913443376858
+Validation Accuracy: 0.21287602989078366
+Train NMI: 0.01924407118419662
+Validation NMI: 0.018592516204818416
+Train Silhouette Score: 0.03505707651952742
+Validation Silhouette Score: 0.030374784142974173
+Fuzzy C-Means fuzziness_exponent=1.25 error=0.01
+Train Accuracy: 0.15960417179929376
+Validation Accuracy: 0.16037555087181452
+Train NMI: 0.018771972776342495
+Validation NMI: 0.019204703914021865
+Train Silhouette Score: 0.04993553698998033
+Validation Silhouette Score: 0.04739069958653535
+Fuzzy C-Means fuzziness_exponent=1.25 error=0.001
+Train Accuracy: 0.17726040896772605
+Validation Accuracy: 0.1815481893082966
+Train NMI: 0.019467787832689373
+Validation NMI: 0.02038091472301268
+Train Silhouette Score: 0.05019333583346908
+Validation Silhouette Score: 0.04882733693342279
+Fuzzy C-Means fuzziness_exponent=1.25 error=0.0001
+Train Accuracy: 0.24024800854069148
+Validation Accuracy: 0.23452768729641693
+Train NMI: 0.019409401717840242
+Validation NMI: 0.01972081563687748
+Train Silhouette Score: 0.048855008700438136
+Validation Silhouette Score: 0.04693956974362558
+Fuzzy C-Means fuzziness_exponent=1.25 error=1e-05
+Train Accuracy: 0.2501437135583477
+Validation Accuracy: 0.24506610461774286
+Train NMI: 0.01906340968917573
+Validation NMI: 0.018493507318020068
+Train Silhouette Score: 0.044896877878543816
+Validation Silhouette Score: 0.03765393758464794
+Fuzzy C-Means fuzziness_exponent=1.1 error=0.01
+Train Accuracy: 0.09698612137636528
+Validation Accuracy: 0.09819888867599157
+Train NMI: 0.019807857871597143
+Validation NMI: 0.020933648500261977
+Train Silhouette Score: 0.05208812232004304
+Validation Silhouette Score: 0.05138288034506854
+Fuzzy C-Means fuzziness_exponent=1.1 error=0.001
+Train Accuracy: 0.2528948016752895
+Validation Accuracy: 0.24669476911285687
+Train NMI: 0.01767825231386225
+Validation NMI: 0.017307583153000877
+Train Silhouette Score: 0.050985023966846184
+Validation Silhouette Score: 0.04918892649460574
+Fuzzy C-Means fuzziness_exponent=1.1 error=0.0001
+Train Accuracy: 0.2581095507924776
+Validation Accuracy: 0.24794021843264993
+Train NMI: 0.016984059671261296
+Validation NMI: 0.015867036241333086
+Train Silhouette Score: 0.048273459524365535
+Validation Silhouette Score: 0.04521399995910652
+Fuzzy C-Means fuzziness_exponent=1.1 error=1e-05
+Train Accuracy: 0.2581095507924776
+Validation Accuracy: 0.24822762981414065
+Train NMI: 0.017012018421362067
+Validation NMI: 0.016023143716491797
+Train Silhouette Score: 0.04938640164597881
+Validation Silhouette Score: 0.04565324742978532
+Fuzzy C-Means fuzziness_exponent=1.05 error=0.01
+Train Accuracy: 0.1535271413320194
+Validation Accuracy: 0.15395669668518874
+Train NMI: 0.024130266108009293
+Validation NMI: 0.025129561646158986
+Train Silhouette Score: 0.057904061268852246
+Validation Silhouette Score: 0.05553570244927807
+Fuzzy C-Means fuzziness_exponent=1.05 error=0.001
+Train Accuracy: 0.13488543976348855
+Validation Accuracy: 0.13268825445487642
+Train NMI: 0.02364021163727101
+Validation NMI: 0.023280744923700414
+Train Silhouette Score: 0.06308355128922642
+Validation Silhouette Score: 0.061122074307380814
+Fuzzy C-Means fuzziness_exponent=1.05 error=0.0001
+Train Accuracy: 0.1316416194464975
+Validation Accuracy: 0.12607779268059016
+Train NMI: 0.023774389174146163
+Validation NMI: 0.023047140903283105
+Train Silhouette Score: 0.05689128188038071
+Validation Silhouette Score: 0.05583199379778132
+Fuzzy C-Means fuzziness_exponent=1.05 error=1e-05
+Train Accuracy: 0.1780816293011415
+Validation Accuracy: 0.1751293351216708
+Train NMI: 0.024374570737892516
+Validation NMI: 0.023439740326566157
+Train Silhouette Score: 0.05681058780479458
+Validation Silhouette Score: 0.05556724865155921
+Best Fuzzy C-Means Validation Accuracy: 0.24822762981414065
+
