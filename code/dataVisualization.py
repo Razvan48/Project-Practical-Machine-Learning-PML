@@ -105,6 +105,9 @@ def visualize_data_1(csv_file_path):
 def is_data_valid(csv_file_path):
 
     csv_file = pd.read_csv(csv_file_path)
+
+    num_samples = len(csv_file)
+    print(f'Number of Samples in Dataset: {num_samples}')
     
     emotions = csv_file['Emotion']
     texts = csv_file['Text']

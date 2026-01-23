@@ -1,0 +1,90 @@
+Top 10 Most Used Tokens per Emotion
+Emotion: neutral
+Token: yes Frequency: 155
+Token: see Frequency: 77
+Token: oh Frequency: 68
+Token: ok Frequency: 65
+Token: like Frequency: 64
+Token: think Frequency: 58
+Token: sure Frequency: 58
+Token: know Frequency: 49
+Token: right Frequency: 49
+Token: good Frequency: 47
+Emotion: joy
+Token: day Frequency: 794
+Token: time Frequency: 705
+Token: im Frequency: 697
+Token: amp Frequency: 682
+Token: christmas Frequency: 622
+Token: love Frequency: 593
+Token: work Frequency: 556
+Token: today Frequency: 524
+Token: get Frequency: 514
+Token: like Frequency: 497
+Emotion: sadness
+Token: im Frequency: 574
+Token: sad Frequency: 424
+Token: time Frequency: 336
+Token: like Frequency: 320
+Token: dont Frequency: 319
+Token: one Frequency: 305
+Token: get Frequency: 261
+Token: day Frequency: 258
+Token: cant Frequency: 249
+Token: died Frequency: 235
+Emotion: fear
+Token: afraid Frequency: 577
+Token: fear Frequency: 492
+Token: love Frequency: 487
+Token: today Frequency: 408
+Token: tomorrow Frequency: 405
+Token: seen Frequency: 364
+Token: yesterday Frequency: 354
+Token: one Frequency: 303
+Token: im Frequency: 293
+Token: dont Frequency: 292
+Emotion: surprise
+Token: en Frequency: 335
+Token: een Frequency: 307
+Token: im Frequency: 293
+Token: de Frequency: 260
+Token: home Frequency: 176
+Token: know Frequency: 169
+Token: one Frequency: 167
+Token: ik Frequency: 164
+Token: day Frequency: 164
+Token: rt Frequency: 164
+Emotion: anger
+Token: angry Frequency: 318
+Token: one Frequency: 251
+Token: anger Frequency: 224
+Token: dont Frequency: 223
+Token: time Frequency: 208
+Token: people Frequency: 208
+Token: get Frequency: 205
+Token: friend Frequency: 200
+Token: im Frequency: 178
+Token: like Frequency: 168
+Emotion: shame
+Token: embarrassed Frequency: 64
+Token: ashamed Frequency: 35
+Token: embarrassment Frequency: 28
+Token: nt Frequency: 9
+Token: mortified Frequency: 8
+Token: humiliated Frequency: 8
+Token: felt Frequency: 8
+Token: see Frequency: 6
+Token: get Frequency: 6
+Token: rather Frequency: 6
+Emotion: disgust
+Token: like Frequency: 92
+Token: people Frequency: 78
+Token: dont Frequency: 67
+Token: im Frequency: 56
+Token: amp Frequency: 50
+Token: hate Frequency: 44
+Token: rt Frequency: 40
+Token: disgruntled Frequency: 36
+Token: u Frequency: 33
+Token: get Frequency: 32
+
