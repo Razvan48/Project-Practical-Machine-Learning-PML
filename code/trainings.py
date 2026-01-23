@@ -11,12 +11,7 @@ from sklearn.cluster import Birch
 from scipy.optimize import linear_sum_assignment
 from skfuzzy.cluster import cmeans
 from skfuzzy.cluster import cmeans_predict
-
-
-RECURSION_LIMIT = 50000
-
-import sys
-sys.setrecursionlimit(RECURSION_LIMIT)
+import matplotlib.pyplot as plt
 
 
 def random_0(path, dataset_type):
@@ -91,10 +86,6 @@ def train_birch_0(path, dataset_type):
     X_validation = np.load(path + f'/X_validation_{dataset_type}.npy')
     Y_validation = np.load(path + f'/Y_validation_{dataset_type}.npy')
 
-    # permutation = np.random.permutation(2500)
-    # X_train = X_train[permutation]
-    # Y_train = Y_train[permutation]
-
     label_encoder = joblib.load(path + f'/label_encoder_{dataset_type}.pkl')
 
     print(f'X_train Shape: {X_train.shape}')
@@ -102,14 +93,8 @@ def train_birch_0(path, dataset_type):
     print(f'X_validation Shape: {X_validation.shape}')
     print(f'Y_validation Shape: {Y_validation.shape}')
 
-    # thresholds = [0.4, 0.3, 0.2, 0.1, 0.05]
-    # branching_factors = [20, 40, 60, 80, 100]
-    
-    # thresholds = [0.5, 0.52, 0.55, 0.57, 0.6, 0.62, 0.65, 0.67, 0.7]
-    # branching_factors = [70, 72, 74, 76, 78, 80, 82, 84, 86, 88, 90]
-
-    thresholds = [0.2]
-    branching_factors = [20]
+    thresholds = [0.3, 0.2, 0.1, 0.05]
+    branching_factors = [20, 40, 50, 70]
 
     num_clusters = len(label_encoder.classes_)
     best_birch = None
@@ -117,7 +102,10 @@ def train_birch_0(path, dataset_type):
     best_branching_factor = None
     best_validation_accuracy = -1.0
 
+    validation_accuracies = []
     for threshold in thresholds:
+        validation_accuracies.append([])
+
         for branching_factor in branching_factors:
             birch = Birch(threshold=threshold, branching_factor=branching_factor,
                           n_clusters=num_clusters)
@@ -164,6 +152,8 @@ def train_birch_0(path, dataset_type):
                 best_threshold = threshold
                 best_branching_factor = branching_factor
 
+            validation_accuracies[-1].append(validation_accuracy)
+
     print(f'Best BIRCH Validation Accuracy: {best_validation_accuracy}')
     os.makedirs(path + '/../models', exist_ok=True)
     best_birch_parameters = {
@@ -171,6 +161,17 @@ def train_birch_0(path, dataset_type):
         'branching_factor': best_branching_factor
     }
     joblib.dump(best_birch_parameters, path + f'/../models/birch_{dataset_type}_{best_validation_accuracy}.pkl')
+
+    if len(validation_accuracies) > 0 and len(validation_accuracies[0]) > 1:
+        plt.figure(figsize=(10, 8))
+        for idx in range(len(thresholds)):
+            plt.plot(branching_factors, validation_accuracies[idx], marker='o', label=f'threshold={thresholds[idx]}')
+        plt.title('BIRCH Validation Accuracies for Different Thresholds')
+        plt.xlabel('Branching Factor')
+        plt.ylabel('Validation Accuracy')
+        plt.legend()
+        plt.savefig(path + f'/../plots/birch_{dataset_type}_validation_accuracies.png')
+        plt.show()
 
 
 def train_fuzzy_c_mean_0(path, dataset_type):
@@ -206,7 +207,10 @@ def train_fuzzy_c_mean_0(path, dataset_type):
 
     NUM_ITERATIONS = 1024
 
+    validation_accuracies = []
     for fuzziness_exponent in fuzziness_exponents:
+        validation_accuracies.append([])
+
         for error in errors:
             cluster_centers, membership_matrix_train, _, _, _, _, _ = cmeans(X_train.T, c=num_clusters, m=fuzziness_exponent, error=error, maxiter=NUM_ITERATIONS, init=None)
             
@@ -252,6 +256,8 @@ def train_fuzzy_c_mean_0(path, dataset_type):
                 best_validation_accuracy = validation_accuracy
                 best_fuzzy_c_means = (cluster_centers, fuzziness_exponent, error)
 
+            validation_accuracies[-1].append(validation_accuracy)
+
     print(f'Best Fuzzy C-Means Validation Accuracy: {best_validation_accuracy}')
     os.makedirs(path + '/../models', exist_ok=True)
     best_fuzzy_c_means_parameters = {
@@ -260,6 +266,16 @@ def train_fuzzy_c_mean_0(path, dataset_type):
     }
     joblib.dump(best_fuzzy_c_means_parameters, path + f'/../models/fuzzy_c_means_{dataset_type}_{best_validation_accuracy}.pkl')
 
+    if len(validation_accuracies) > 0 and len(validation_accuracies[0]) > 1:
+        plt.figure(figsize=(10, 8))
+        for idx in range(len(fuzziness_exponents)):
+            plt.plot(errors, validation_accuracies[idx], marker='o', label=f'fuzziness_exponent={fuzziness_exponents[idx]}')
+        plt.title('Fuzzy C-Means Validation Accuracies for Different Fuzziness Exponents')
+        plt.xlabel('Error')
+        plt.ylabel('Validation Accuracy')
+        plt.legend()
+        plt.savefig(path + f'/../plots/fuzzy_c_means_{dataset_type}_validation_accuracies.png')
+        plt.show()
 
 
 
