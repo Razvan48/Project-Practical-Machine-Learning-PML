@@ -6,6 +6,8 @@ from nltk.corpus import stopwords
 
 
 def visualize_data_0(csv_file_path):
+    # This function visualizes how many texts there are per sentiment in the dataset, along with their percentages.
+    # csv_file is the path to the CSV file.
     
     csv_file = pd.read_csv(csv_file_path)
     
@@ -34,6 +36,9 @@ def visualize_data_0(csv_file_path):
     
     
 def preprocess_text_0(text):
+    # This function preprocesses the text by lowercasing it and keeping only letters and .,?! and spaces.
+    # text is the original text.
+
     preprocessed_text = text.strip().lower()
     # preprocessed_text = re.sub(r'[^a-z.,?!\s]', '', preprocessed_text)
     preprocessed_text = re.sub(r'[^a-z\s]', '', preprocessed_text)
@@ -41,6 +46,9 @@ def preprocess_text_0(text):
 
 
 def tokenize_text_0(preprocessed_text, stop_words=set()):
+    # This function breaks the preprocessed text into works (only letters).
+    # If a word is in stop_words, it is ignored.
+
     # tokenized_text = re.findall(r'[a-z]+|[.,?!]', preprocessed_text)
     tokenized_text = re.findall(r'[a-z]+', preprocessed_text)
     tokenized_text = [token for token in tokenized_text if token not in stop_words]
@@ -48,6 +56,8 @@ def tokenize_text_0(preprocessed_text, stop_words=set()):
 
 
 def visualize_data_1(csv_file_path):
+    # This function visualizes the average number of words per sentiment (and saves the plot as .png) and the most used words per sentiment.
+    # csv_file is the path to the CSV file.
     
     csv_file = pd.read_csv(csv_file_path)
     
@@ -103,6 +113,8 @@ def visualize_data_1(csv_file_path):
 
 
 def is_data_valid(csv_file_path):
+    # This function checks how many samples are in the dataset and whether they are valid (text of length > 0 and known sentiments).
+    # csv_file is the path to the CSV file.
 
     csv_file = pd.read_csv(csv_file_path)
 
