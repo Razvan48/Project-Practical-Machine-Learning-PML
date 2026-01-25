@@ -13,6 +13,8 @@ import dataVisualization
 
 
 def create_tf_idf_dataset_0(csv_file_path):
+    # This function creates a TF-IDF Features Dataset from the original CSV file.
+    # csv_file is the path to the CSV file.
     
     csv_file = pd.read_csv(csv_file_path)
     
@@ -30,16 +32,19 @@ def create_tf_idf_dataset_0(csv_file_path):
 
     TRAIN_PERCENTAGE = 0.7
 
+    # Train-Validation Split
     X_train, X_validation, Y_train, Y_validation = train_test_split(final_texts, emotions,
                                                         train_size=TRAIN_PERCENTAGE,
                                                         random_state=23, shuffle=True,
                                                         stratify=emotions)
     
+    # We train a TF-IDF Vectorizer only on training data, but we transform both training and validation with it.
     tf_idf_vectorizer = TfidfVectorizer(max_features=128)
     tf_idf_vectorizer.fit(X_train)
     X_train_tf_idf = tf_idf_vectorizer.transform(X_train)
     X_validation_tf_idf = tf_idf_vectorizer.transform(X_validation)
 
+    # Same thing for Label Encoding as for TF-IDF Vectorizer.
     label_encoder = LabelEncoder()
     label_encoder.fit(Y_train)
     Y_train_encoded = label_encoder.transform(Y_train)
@@ -53,6 +58,7 @@ def create_tf_idf_dataset_0(csv_file_path):
     print(f'X_validation_tf_idf Shape: {X_validation_tf_idf.shape}')
     print(f'Y_validation_encoded Shape: {Y_validation_encoded.shape}')
 
+    # Save datasets and Label Encoder and TF-IDF Vectorizer.
     os.makedirs('../data', exist_ok=True)
 
     np.save('../data/X_train_tf_idf.npy', X_train_tf_idf)
@@ -65,6 +71,8 @@ def create_tf_idf_dataset_0(csv_file_path):
 
 
 def create_fasttext_dataset_0(csv_file_path):
+    # This function creates a Fasttext Features Dataset from the original CSV file.
+    # csv_file is the path to the CSV file.
        
     csv_file = pd.read_csv(csv_file_path)
     
@@ -78,10 +86,14 @@ def create_fasttext_dataset_0(csv_file_path):
 
     tokenized_texts = [dataVisualization.tokenize_text_0(preprocessed_text, stop_words=stop_words) for preprocessed_text in preprocessed_texts]
 
-    model = fasttext.load_model('../fasttext/cc.en.300.bin')
+    # Load Fasttext Model
+    model = fasttext.load_model('../fasttext/cc.en.300.bin') # The model is expected to be in this path, see main.py for project folder hierarchy.
     model_vocabulary = set(model.get_words())
     model_dimension = model.get_dimension()
 
+    # Each sample of text from dataset is represented as the mean of Fasttext embeddings of its words.
+    # If a word is not in the vocabulary, it is ignored.
+    # If the text has no words in the vocabulary, the embedding is only zeros.
     embedded_texts = []
     for idx_text, tokenized_text in enumerate(tokenized_texts):
         embedded_tokens = []
@@ -98,11 +110,13 @@ def create_fasttext_dataset_0(csv_file_path):
 
     TRAIN_PERCENTAGE = 0.7
 
+    # Train-Validation Split
     X_train, X_validation, Y_train, Y_validation = train_test_split(embedded_texts, emotions,
                                                         train_size=TRAIN_PERCENTAGE,
                                                         random_state=23, shuffle=True,
                                                         stratify=emotions)
 
+    # Label Encoding (fit only on training data, transform both training and validation)
     label_encoder = LabelEncoder()
     label_encoder.fit(Y_train)
     Y_train_encoded = label_encoder.transform(Y_train)
@@ -113,6 +127,7 @@ def create_fasttext_dataset_0(csv_file_path):
     print(f'X_validation Shape: {X_validation.shape}')
     print(f'Y_validation_encoded Shape: {Y_validation_encoded.shape}')
 
+    # Save datasets and Label Encoder.
     os.makedirs('../data', exist_ok=True)
 
     np.save('../data/X_train_fasttext.npy', X_train)

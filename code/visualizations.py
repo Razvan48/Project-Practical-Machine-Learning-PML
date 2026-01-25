@@ -15,6 +15,10 @@ from sklearn.metrics import f1_score
 
 
 def visualize_birch_0(root_path, model_name, dataset_type):
+    # This function does multiple visualizations and interpretations for a trained BIRCH Clustering model on train and validation datasets.
+    # root_path is the path to the root folder (see main.py for folder hierarchy).
+    # model_name is the name of the saved BIRCH model (see trainings.py for how they are named).
+    # dataset_type is {'tf_idf', 'fasttext'}.
 
     X_train = np.load(root_path + f'/data/X_train_{dataset_type}.npy')
     Y_train = np.load(root_path + f'/data/Y_train_{dataset_type}.npy')
@@ -39,12 +43,14 @@ def visualize_birch_0(root_path, model_name, dataset_type):
     confusion_matrix_train = confusion_matrix(Y_train, Y_train_pred)
     normalized_confusion_matrix_train = confusion_matrix_train / confusion_matrix_train.sum(axis=1, keepdims=True)
 
+    # Hungarian Algorithm to map cluster IDs to true labels (used the normalized negated confusion matrix as cost matrix).
     row_idx_sol, col_idx_sol = linear_sum_assignment(-normalized_confusion_matrix_train)
     from_cluster_id_to_label = {col_idx: row_idx for row_idx, col_idx in zip(row_idx_sol, col_idx_sol)}
 
     Y_train_pred_labels = np.array([from_cluster_id_to_label[cluster_id] for cluster_id in Y_train_pred])
     Y_validation_pred_labels = np.array([from_cluster_id_to_label[cluster_id] for cluster_id in Y_validation_pred])
 
+    # Confusion Matrices for Train and Validation Sets
     confusion_matrix_train_labels = confusion_matrix(Y_train, Y_train_pred_labels)
     confusion_matrix_validation_labels = confusion_matrix(Y_validation, Y_validation_pred_labels)
 
@@ -53,6 +59,7 @@ def visualize_birch_0(root_path, model_name, dataset_type):
     confusion_matrix_display_validation = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix_validation_labels,
                                                                  display_labels=label_encoder.classes_)
     
+    # Plot and save confusion matrices
     confusion_matrix_display_train.plot(cmap=plt.cm.Blues)
     plt.title('BIRCH Train Confusion Matrix')
     plt.savefig(root_path + f'/plots/{model_name}_confusion_matrix_train.png')
@@ -63,6 +70,7 @@ def visualize_birch_0(root_path, model_name, dataset_type):
     plt.savefig(root_path + f'/plots/{model_name}_confusion_matrix_validation.png')
     plt.show()
 
+    # t-SNE Visualizations only for Validation Set (colored with true labels and predicted labels for comparison)
     tsne = TSNE(n_components=2, random_state=23)
     X_validation_tsne = tsne.fit_transform(X_validation)
 
@@ -88,6 +96,7 @@ def visualize_birch_0(root_path, model_name, dataset_type):
     plt.savefig(root_path + f'/plots/{model_name}_tsne_visualization_validation_predicted.png')
     plt.show()
 
+    # Compute and print evaluation metrics
     train_accuracy = accuracy_score(Y_train, Y_train_pred_labels)
     validation_accuracy = accuracy_score(Y_validation, Y_validation_pred_labels)
 
@@ -112,15 +121,19 @@ def visualize_birch_0(root_path, model_name, dataset_type):
     print(f'Train F1-Score: {train_f1_score}')
     print(f'Validation F1-Score: {validation_f1_score}')
 
+    # Top TF-IDF Features per Sentiment (only for TF-IDF Dataset)
     if dataset_type == 'tf_idf':
         tf_idf_vectorizer = joblib.load(root_path + f'/data/tf_idf_vectorizer.pkl')
 
         TOP_K_MOST_SIGNIFICANT_TF_IDF_FEATURES = 10
 
         for label in range(len(label_encoder.classes_)):
+            # We take all samples predicted to belong to this label.
             X_label = X_validation[Y_validation_pred_labels == label]
+            # We compute the mean TF-IDF counts across all these samples.
             tf_idf_counts_mean = np.mean(X_label, axis=0)
 
+            # We take the top K features with highest mean TF-IDF counts.
             top_k_feature_indices = np.argsort(tf_idf_counts_mean)[-TOP_K_MOST_SIGNIFICANT_TF_IDF_FEATURES:][::-1]
             print(f'Top {TOP_K_MOST_SIGNIFICANT_TF_IDF_FEATURES} TF-IDF Features for Emotion {label_encoder.classes_[label]}')
             for feature_index in top_k_feature_indices:
@@ -130,6 +143,10 @@ def visualize_birch_0(root_path, model_name, dataset_type):
 
 
 def visualize_fuzzy_c_mean_0(root_path, model_name, dataset_type):
+    # This function does multiple visualizations and interpretations for a trained Fuzzy C-Means Clustering model on train and validation datasets.
+    # root_path is the path to the root folder (see main.py for folder hierarchy).
+    # model_name is the name of the saved Fuzzy C-Means model (see trainings.py for how they are named).
+    # dataset_type is {'tf_idf', 'fasttext'}.
 
     X_train = np.load(root_path + f'/data/X_train_{dataset_type}.npy')
     Y_train = np.load(root_path + f'/data/Y_train_{dataset_type}.npy')
@@ -165,6 +182,7 @@ def visualize_fuzzy_c_mean_0(root_path, model_name, dataset_type):
     confusion_matrix_train = confusion_matrix(Y_train, Y_train_pred)
     normalized_confusion_matrix_train = confusion_matrix_train / confusion_matrix_train.sum(axis=1, keepdims=True)
 
+    # Hungarian Algorithm to map cluster IDs to true labels (used the normalized negated confusion matrix as cost matrix).
     row_idx_sol, col_idx_sol = linear_sum_assignment(-normalized_confusion_matrix_train)
     from_cluster_id_to_label = {col_idx: row_idx for row_idx, col_idx in zip(row_idx_sol, col_idx_sol)}
 
@@ -174,6 +192,7 @@ def visualize_fuzzy_c_mean_0(root_path, model_name, dataset_type):
     confusion_matrix_train_labels = confusion_matrix(Y_train, Y_train_pred_labels)
     confusion_matrix_validation_labels = confusion_matrix(Y_validation, Y_validation_pred_labels)
 
+    # Plot and save confusion matrices
     confusion_matrix_display_train = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix_train_labels,
                                                             display_labels=label_encoder.classes_)
     confusion_matrix_display_validation = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix_validation_labels,
@@ -189,6 +208,7 @@ def visualize_fuzzy_c_mean_0(root_path, model_name, dataset_type):
     plt.savefig(root_path + f'/plots/{model_name}_confusion_matrix_validation.png')
     plt.show()
 
+    # t-SNE Visualizations only for Validation Set (colored with true labels and predicted labels for comparison)
     tsne = TSNE(n_components=2, random_state=23)
     X_validation_tsne = tsne.fit_transform(X_validation)
 
@@ -214,6 +234,7 @@ def visualize_fuzzy_c_mean_0(root_path, model_name, dataset_type):
     plt.savefig(root_path + f'/plots/{model_name}_tsne_visualization_validation_predicted.png')
     plt.show()
 
+    # Compute and print evaluation metrics
     train_accuracy = accuracy_score(Y_train, Y_train_pred_labels)
     validation_accuracy = accuracy_score(Y_validation, Y_validation_pred_labels)
 
@@ -238,15 +259,19 @@ def visualize_fuzzy_c_mean_0(root_path, model_name, dataset_type):
     print(f'Train F1-Score: {train_f1_score}')
     print(f'Validation F1-Score: {validation_f1_score}')
 
+    # Top TF-IDF Features per Sentiment (only for TF-IDF Dataset)
     if dataset_type == 'tf_idf':
         tf_idf_vectorizer = joblib.load(root_path + f'/data/tf_idf_vectorizer.pkl')
 
         TOP_K_MOST_SIGNIFICANT_TF_IDF_FEATURES = 10
 
         for label in range(len(label_encoder.classes_)):
+            # We take all samples predicted to belong to this label.
             X_label = X_validation[Y_validation_pred_labels == label]
+            # We compute the mean TF-IDF counts across all these samples.
             tf_idf_counts_mean = np.mean(X_label, axis=0)
 
+            # We take the top K features with highest mean TF-IDF counts.
             top_k_feature_indices = np.argsort(tf_idf_counts_mean)[-TOP_K_MOST_SIGNIFICANT_TF_IDF_FEATURES:][::-1]
             print(f'Top {TOP_K_MOST_SIGNIFICANT_TF_IDF_FEATURES} TF-IDF Features for Emotion {label_encoder.classes_[label]}')
             for feature_index in top_k_feature_indices:

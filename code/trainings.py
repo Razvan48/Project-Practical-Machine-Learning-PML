@@ -15,6 +15,9 @@ import matplotlib.pyplot as plt
 
 
 def random_0(path, dataset_type):
+    # This function evaluates a random classifier on train and validation datasets.
+    # path is the path to the data folder (see main.py for folder hierarchy).
+    # dataset_type is {'tf_idf', 'fasttext'}.
 
     X_train = np.load(path + f'/X_train_{dataset_type}.npy')
     Y_train = np.load(path + f'/Y_train_{dataset_type}.npy')
@@ -39,6 +42,10 @@ def random_0(path, dataset_type):
 
 
 def train_random_forest_0(path, dataset_type):
+    # This function trains and evaluates a Random Forest Classifier (supervised baseline) on train and validation datasets.
+    # path is the path to the data folder (see main.py for folder hierarchy).
+    # dataset_type is {'tf_idf', 'fasttext'}.
+    # This function does hyperparameter tuning for max_depth and n_estimators and saves the best validation accuracy model.
 
     X_train = np.load(path + f'/X_train_{dataset_type}.npy')
     Y_train = np.load(path + f'/Y_train_{dataset_type}.npy')
@@ -80,6 +87,11 @@ def train_random_forest_0(path, dataset_type):
     
 
 def train_birch_0(path, dataset_type):
+    # This function trains and evaluates a BIRCH Clustering model on train and validation datasets.
+    # path is the path to the data folder (see main.py for folder hierarchy).
+    # dataset_type is {'tf_idf', 'fasttext'}.
+    # This function does hyperparameter tuning for threshold and branching_factor and saves the best validation accuracy model.
+    # The values for threshold and branching_factor depend on the dataset_type.
 
     X_train = np.load(path + f'/X_train_{dataset_type}.npy')
     Y_train = np.load(path + f'/Y_train_{dataset_type}.npy')
@@ -121,6 +133,7 @@ def train_birch_0(path, dataset_type):
             confusion_matrix_train = confusion_matrix(Y_train, Y_train_pred)
             normalized_confusion_matrix_train = confusion_matrix_train / confusion_matrix_train.sum(axis=1, keepdims=True)
 
+            # Hungarian Algorithm to map cluster IDs to true labels (used the normalized negated confusion matrix as cost matrix).
             row_idx_sol, col_idx_sol = linear_sum_assignment(-normalized_confusion_matrix_train)
             from_cluster_id_to_label = {col_idx: row_idx for row_idx, col_idx in zip(row_idx_sol, col_idx_sol)}
 
@@ -158,6 +171,7 @@ def train_birch_0(path, dataset_type):
 
             validation_accuracies[-1].append(validation_accuracy)
 
+    # Save the best validation accuracy model.
     print(f'Best BIRCH Validation Accuracy: {best_validation_accuracy}')
     os.makedirs(path + '/../models', exist_ok=True)
     best_birch_parameters = {
@@ -166,6 +180,7 @@ def train_birch_0(path, dataset_type):
     }
     joblib.dump(best_birch_parameters, path + f'/../models/birch_{dataset_type}_{best_validation_accuracy}.pkl')
 
+    # Plot validation accuracies for different hyperparameter combinations.
     if len(validation_accuracies) > 0 and len(validation_accuracies[0]) > 1:
         plt.figure(figsize=(10, 8))
         for idx in range(len(thresholds)):
@@ -179,6 +194,10 @@ def train_birch_0(path, dataset_type):
 
 
 def train_fuzzy_c_mean_0(path, dataset_type):
+    # This function trains and evaluates a Fuzzy C-Means Clustering model on train and validation datasets.
+    # path is the path to the data folder (see main.py for folder hierarchy).
+    # dataset_type is {'tf_idf', 'fasttext'}.
+    # This function does hyperparameter tuning for fuzziness_exponent and error and saves the best validation accuracy model.
     
     X_train = np.load(path + f'/X_train_{dataset_type}.npy')
     Y_train = np.load(path + f'/Y_train_{dataset_type}.npy')
@@ -221,6 +240,7 @@ def train_fuzzy_c_mean_0(path, dataset_type):
             confusion_matrix_train = confusion_matrix(Y_train, Y_train_pred)
             normalized_confusion_matrix_train = confusion_matrix_train / confusion_matrix_train.sum(axis=1, keepdims=True)
 
+            # Hungarian Algorithm to map cluster IDs to true labels (used the normalized negated confusion matrix as cost matrix).
             row_idx_sol, col_idx_sol = linear_sum_assignment(-normalized_confusion_matrix_train)
             from_cluster_id_to_label = {col_idx: row_idx for row_idx, col_idx in zip(row_idx_sol, col_idx_sol)}
 
@@ -256,6 +276,7 @@ def train_fuzzy_c_mean_0(path, dataset_type):
 
             validation_accuracies[-1].append(validation_accuracy)
 
+    # Save the best validation accuracy model.
     print(f'Best Fuzzy C-Means Validation Accuracy: {best_validation_accuracy}')
     os.makedirs(path + '/../models', exist_ok=True)
     best_fuzzy_c_means_parameters = {
@@ -264,6 +285,7 @@ def train_fuzzy_c_mean_0(path, dataset_type):
     }
     joblib.dump(best_fuzzy_c_means_parameters, path + f'/../models/fuzzy_c_means_{dataset_type}_{best_validation_accuracy}.pkl')
 
+    # Plot validation accuracies for different hyperparameter combinations.
     if len(validation_accuracies) > 0 and len(validation_accuracies[0]) > 1:
         plt.figure(figsize=(10, 8))
         for idx in range(len(fuzziness_exponents)):
